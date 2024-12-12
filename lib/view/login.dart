@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:sajilotantra/view/dashboard.dart';
 import 'package:sajilotantra/view/register.dart';
 
 class Login extends StatefulWidget {
@@ -13,6 +14,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -117,12 +119,18 @@ class _LoginState extends State<Login> {
                                     color: Color.fromRGBO(196, 135, 198, 1)),
                               )))),
                   SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
                   FadeInUp(
                       duration: Duration(milliseconds: 1900),
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Dashboard()),
+                          );
+                        },
                         color: const Color.fromRGBO(234, 241, 248, 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -138,7 +146,7 @@ class _LoginState extends State<Login> {
                         ),
                       )),
                   SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
                   FadeInUp(
                       duration: Duration(milliseconds: 2000),
