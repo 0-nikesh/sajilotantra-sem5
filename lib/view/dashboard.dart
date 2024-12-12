@@ -18,6 +18,7 @@ class SocialMediaUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(234, 241, 248, 1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -42,15 +43,19 @@ class SocialMediaUI extends StatelessWidget {
             child: TextField(
               decoration: InputDecoration(
                 hintText: "Let's share what going...",
-                prefixIcon: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/avatar.png'),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage('assets/images/avatar.png'),
+                  ),
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: const Color.fromARGB(255, 255, 255, 255),
               ),
             ),
           ),
@@ -134,6 +139,7 @@ class PostCard extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
+                  backgroundColor: Colors.white,
                   backgroundImage: AssetImage('assets/images/avatar.png'),
                 ),
                 SizedBox(width: 10),
