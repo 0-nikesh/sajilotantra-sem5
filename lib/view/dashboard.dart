@@ -82,10 +82,18 @@ class SocialMediaUI extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Map',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
@@ -97,7 +105,7 @@ class SocialMediaUI extends StatelessWidget {
           ),
         ],
         currentIndex: 0,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: const Color.fromRGBO(243, 40, 84, 1),
       ),
     );
   }
