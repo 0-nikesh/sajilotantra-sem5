@@ -22,7 +22,7 @@ class SocialMediaUI extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          "SocialApp",
+          "Sajilotantra",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -30,7 +30,7 @@ class SocialMediaUI extends StatelessWidget {
         ),
         actions: [
           CircleAvatar(
-            backgroundImage: AssetImage('assets/avatar.png'),
+            backgroundImage: AssetImage('assets/images/avatar.png'),
           ),
           SizedBox(width: 10),
         ],
@@ -43,7 +43,7 @@ class SocialMediaUI extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: "Let's share what going...",
                 prefixIcon: CircleAvatar(
-                  backgroundImage: AssetImage('assets/avatar.png'),
+                  backgroundImage: AssetImage('assets/images/avatar.png'),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -59,7 +59,7 @@ class SocialMediaUI extends StatelessWidget {
             time: "June 9, 2024, 7:52 A.M",
             content: "Corruption and Bribery at License Office",
             hashtag: "#Problems",
-            imagePath: 'assets/corruption.png',
+            imagePath: 'assets/images/corruption.png',
             likes: 12,
             comments: 12,
             shares: 12,
@@ -69,7 +69,7 @@ class SocialMediaUI extends StatelessWidget {
             time: "June 9, 2024, 7:52 A.M",
             content: "License Nikalni Procedure K ho?",
             hashtag: "#Query",
-            imagePath: 'assets/license_procedure.png',
+            imagePath: 'assets/images/corruption.png',
             likes: 8,
             comments: 4,
             shares: 3,
@@ -134,7 +134,7 @@ class PostCard extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/avatar.png'),
+                  backgroundImage: AssetImage('assets/images/avatar.png'),
                 ),
                 SizedBox(width: 10),
                 Column(
