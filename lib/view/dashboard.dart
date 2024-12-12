@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Dashboard());
 }
 
-class MyApp extends StatelessWidget {
+class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,15 +22,51 @@ class SocialMediaUI extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
-          "Sajilotantra",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/icons/logo.png', // Path to your logo image
+              height: 30,
+              width: 30,
+            ),
+            SizedBox(width: 20),
+            Flexible(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  filled: true,
+                  fillColor: Color.fromRGBO(234, 241, 248, 1),
+                  contentPadding: EdgeInsets.all(5),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.notifications, color: Colors.black),
+                onPressed: () {},
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: CircleAvatar(
+                  radius: 6,
+                  backgroundColor: Colors.red,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: 10),
           CircleAvatar(
+            backgroundColor: Colors.white,
             backgroundImage: AssetImage('assets/images/avatar.png'),
           ),
           SizedBox(width: 10),
@@ -88,19 +124,31 @@ class SocialMediaUI extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(
+              Icons.calendar_month,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: Icon(
+              Icons.map,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            ),
             label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message),
+            icon: Icon(
+              Icons.message,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            ),
             label: 'Messages',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(
+              Icons.settings,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            ),
             label: 'Settings',
           ),
         ],
