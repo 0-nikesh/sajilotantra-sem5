@@ -1,43 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:sajilotantra/common/card.dart';
 
 void main() {
-  runApp(Dashboard());
+  runApp(const Dashboard());
 }
 
 class Dashboard extends StatelessWidget {
+  const Dashboard({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SocialMediaUI(),
     );
   }
 }
 
-class SocialMediaUI extends StatelessWidget {
+class SocialMediaUI extends StatefulWidget {
+  const SocialMediaUI({super.key});
+
+  @override
+  _SocialMediaUIState createState() => _SocialMediaUIState();
+}
+
+class _SocialMediaUIState extends State<SocialMediaUI> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(234, 241, 248, 1),
+      backgroundColor: const Color.fromRGBO(234, 241, 248, 1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         title: Row(
           children: [
             Image.asset(
-              'assets/icons/logo.png', // Path to your logo image
+              'assets/icons/logo.png',
               height: 30,
               width: 30,
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Flexible(
               child: TextField(
                 decoration: InputDecoration(
                   hintText: "Search",
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   filled: true,
-                  fillColor: Color.fromRGBO(234, 241, 248, 1),
-                  contentPadding: EdgeInsets.all(5),
+                  fillColor: const Color.fromRGBO(234, 241, 248, 1),
+                  contentPadding: const EdgeInsets.all(5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -51,10 +69,10 @@ class SocialMediaUI extends StatelessWidget {
           Stack(
             children: [
               IconButton(
-                icon: Icon(Icons.notifications, color: Colors.black),
+                icon: const Icon(Icons.notifications, color: Colors.black),
                 onPressed: () {},
               ),
-              Positioned(
+              const Positioned(
                 right: 8,
                 top: 8,
                 child: CircleAvatar(
@@ -64,12 +82,12 @@ class SocialMediaUI extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(width: 10),
-          CircleAvatar(
+          const SizedBox(width: 10),
+          const CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: AssetImage('assets/images/avatar.png'),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
       ),
       body: ListView(
@@ -79,8 +97,8 @@ class SocialMediaUI extends StatelessWidget {
             child: TextField(
               decoration: InputDecoration(
                 hintText: "Let's share what going...",
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     backgroundImage: AssetImage('assets/images/avatar.png'),
@@ -95,7 +113,7 @@ class SocialMediaUI extends StatelessWidget {
               ),
             ),
           ),
-          PostCard(
+          const PostCard(
             username: "Mr_Handsome",
             time: "June 9, 2024, 7:52 A.M",
             content: "Corruption and Bribery at License Office",
@@ -105,7 +123,7 @@ class SocialMediaUI extends StatelessWidget {
             comments: 12,
             shares: 12,
           ),
-          PostCard(
+          const PostCard(
             username: "Shyame",
             time: "June 9, 2024, 7:52 A.M",
             content: "License Nikalni Procedure K ho?",
@@ -117,149 +135,50 @@ class SocialMediaUI extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.calendar_month,
-              color: Color.fromRGBO(0, 0, 0, 1),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.map,
-              color: Color.fromRGBO(0, 0, 0, 1),
-            ),
-            label: 'Map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.message,
-              color: Color.fromRGBO(0, 0, 0, 1),
-            ),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings,
-              color: Color.fromRGBO(0, 0, 0, 1),
-            ),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: 0,
-        selectedItemColor: const Color.fromRGBO(243, 40, 84, 1),
-      ),
-    );
-  }
-}
-
-class PostCard extends StatelessWidget {
-  final String username;
-  final String time;
-  final String content;
-  final String hashtag;
-  final String imagePath;
-  final int likes;
-  final int comments;
-  final int shares;
-
-  PostCard({
-    required this.username,
-    required this.time,
-    required this.content,
-    required this.hashtag,
-    required this.imagePath,
-    required this.likes,
-    required this.comments,
-    required this.shares,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('assets/images/avatar.png'),
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      username,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      time,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Text(content),
-            SizedBox(height: 5),
-            Text(
-              hashtag,
-              style: TextStyle(
-                color: Colors.blue,
-              ),
-            ),
-            SizedBox(height: 10),
-            Image.asset(imagePath),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconWithText(icon: Icons.thumb_up, text: likes.toString()),
-                IconWithText(icon: Icons.comment, text: comments.toString()),
-                IconWithText(icon: Icons.share, text: shares.toString()),
-              ],
-            ),
+            _buildNavItem(Icons.home, 0),
+            _buildNavItem(Icons.calendar_month, 1),
+            _buildNavItem(Icons.map, 2),
+            _buildNavItem(Icons.document_scanner, 3),
+            _buildNavItem(Icons.settings, 4),
           ],
         ),
       ),
     );
   }
-}
 
-class IconWithText extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  IconWithText({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: Colors.grey),
-        SizedBox(width: 5),
-        Text(text, style: TextStyle(color: Colors.grey)),
-      ],
+  Widget _buildNavItem(IconData icon, int index) {
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: _selectedIndex == index
+              ? const Color.fromRGBO(243, 40, 84, 1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          icon,
+          color: _selectedIndex == index ? Colors.white : Colors.grey,
+        ),
+      ),
     );
   }
 }
