@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sajilotantra/common/card.dart';
+import 'package:sajilotantra/bottom_screen/calendar.dart';
+import 'package:sajilotantra/bottom_screen/document.dart';
+import 'package:sajilotantra/bottom_screen/home.dart';
+import 'package:sajilotantra/bottom_screen/map.dart';
+import 'package:sajilotantra/bottom_screen/setting.dart';
 
 void main() {
   runApp(const Dashboard());
@@ -26,6 +30,14 @@ class SocialMediaUI extends StatefulWidget {
 
 class _SocialMediaUIState extends State<SocialMediaUI> {
   int _selectedIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const Calendar(),
+    const MapScreen(),
+    const Document(),
+    const Setting(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -90,51 +102,7 @@ class _SocialMediaUIState extends State<SocialMediaUI> {
           const SizedBox(width: 10),
         ],
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Let's share what going...",
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage('assets/images/avatar.png'),
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: const Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-          ),
-          const PostCard(
-            username: "Mr_Handsome",
-            time: "June 9, 2024, 7:52 A.M",
-            content: "Corruption and Bribery at License Office",
-            hashtag: "#Problems",
-            imagePath: 'assets/images/corruption.png',
-            likes: 12,
-            comments: 12,
-            shares: 12,
-          ),
-          const PostCard(
-            username: "Shyame",
-            time: "June 9, 2024, 7:52 A.M",
-            content: "License Nikalni Procedure K ho?",
-            hashtag: "#Query",
-            imagePath: 'assets/images/corruption.png',
-            likes: 8,
-            comments: 4,
-            shares: 3,
-          ),
-        ],
-      ),
+      body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
