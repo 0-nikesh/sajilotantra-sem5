@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_splash/flutter_animated_splash.dart';
 import 'package:sajilotantra/view/dashboard.dart';
 import 'package:sajilotantra/view/login.dart';
+import 'package:sajilotantra/view/onboarding.dart';
 import 'package:sajilotantra/view/register.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const Login()),
+      MaterialPageRoute(builder: (context) => OnboardingScreen()),
     );
   }
 

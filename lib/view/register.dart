@@ -10,9 +10,14 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -40,10 +45,12 @@ class _RegisterState extends State<Register> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  FadeInUp(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    FadeInUp(
                       duration: Duration(milliseconds: 1500),
                       child: const Center(
                         child: Text(
@@ -53,14 +60,15 @@ class _RegisterState extends State<Register> {
                               fontWeight: FontWeight.bold,
                               fontSize: 30),
                         ),
-                      )),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  FadeInUp(
-                    duration: Duration(milliseconds: 1700),
-                    child: Container(
-                      decoration: BoxDecoration(
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    FadeInUp(
+                      duration: Duration(milliseconds: 1700),
+                      child: Container(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                           border: Border.all(
@@ -71,60 +79,114 @@ class _RegisterState extends State<Register> {
                               blurRadius: 20,
                               offset: Offset(0, 10),
                             )
-                          ]),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            // Email Field
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
                                 border: Border(
-                                    bottom: BorderSide(
-                                        color: Color.fromRGBO(
-                                            196, 135, 198, .3)))),
-                            child: TextField(
-                              decoration: InputDecoration(
+                                  bottom: BorderSide(
+                                    color: Color.fromRGBO(196, 135, 198, .3),
+                                  ),
+                                ),
+                              ),
+                              child: TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "Username",
+                                  hintText: "Email",
                                   hintStyle:
-                                      TextStyle(color: Colors.grey.shade700)),
+                                      TextStyle(color: Colors.grey.shade700),
+                                  prefixIcon: Icon(Icons.email,
+                                      color: Colors.grey.shade700),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  } else if (!RegExp(r'^\S+@\S+\.\S+\$')
+                                      .hasMatch(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              obscureText: true,
-                              decoration: InputDecoration(
+                            // Password Field
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Color.fromRGBO(196, 135, 198, .3),
+                                  ),
+                                ),
+                              ),
+                              child: TextFormField(
+                                controller: _passwordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Password",
                                   hintStyle:
-                                      TextStyle(color: Colors.grey.shade700)),
+                                      TextStyle(color: Colors.grey.shade700),
+                                  prefixIcon: Icon(Icons.lock,
+                                      color: Colors.grey.shade700),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password';
+                                  } else if (value.length < 6) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              obscureText: true,
-                              decoration: InputDecoration(
+                            // Confirm Password Field
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              child: TextFormField(
+                                controller: _confirmPasswordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Confirm Password",
                                   hintStyle:
-                                      TextStyle(color: Colors.grey.shade700)),
+                                      TextStyle(color: Colors.grey.shade700),
+                                  prefixIcon: Icon(Icons.lock_outline,
+                                      color: Colors.grey.shade700),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please confirm your password';
+                                  } else if (value !=
+                                      _passwordController.text) {
+                                    return 'Passwords do not match';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  FadeInUp(
+                    SizedBox(
+                      height: 20,
+                    ),
+                    FadeInUp(
                       duration: Duration(milliseconds: 1900),
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            
+                            // Perform registration logic here
+                          }
+                        },
                         color: const Color.fromRGBO(234, 241, 248, 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -138,27 +200,33 @@ class _RegisterState extends State<Register> {
                                 fontSize: 24),
                           ),
                         ),
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  FadeInUp(
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    FadeInUp(
                       duration: Duration(milliseconds: 2000),
                       child: Center(
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()),
-                                );
-                              },
-                              child: Text(
-                                "Already Created? ",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(49, 39, 79, .6)),
-                              )))),
-                ],
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Already Created? ",
+                            style: TextStyle(
+                                color: Color.fromRGBO(49, 39, 79, .6)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],

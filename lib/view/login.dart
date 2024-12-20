@@ -11,26 +11,28 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 400,
               child: Stack(
                 children: <Widget>[
                   Center(
                     child: FadeInUp(
-                      duration: Duration(milliseconds: 1000),
+                      duration: const Duration(milliseconds: 1000),
                       child: Container(
                         height: 200,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                           image: AssetImage('assets/images/tantra-logo.png'),
                         )),
@@ -41,12 +43,14 @@ class _LoginState extends State<Login> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1500),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1500),
                       child: const Center(
                         child: Text(
                           "Login",
@@ -55,19 +59,20 @@ class _LoginState extends State<Login> {
                               fontWeight: FontWeight.bold,
                               fontSize: 30),
                         ),
-                      )),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1700),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1700),
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                             border: Border.all(
-                                color: Color.fromRGBO(196, 135, 198, .3)),
-                            boxShadow: [
+                                color: const Color.fromRGBO(196, 135, 198, .3)),
+                            boxShadow: const [
                               BoxShadow(
                                 color: Color.fromRGBO(196, 135, 198, .3),
                                 blurRadius: 20,
@@ -76,60 +81,95 @@ class _LoginState extends State<Login> {
                             ]),
                         child: Column(
                           children: <Widget>[
+                            // Email Field
                             Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
                                           color: Color.fromRGBO(
                                               196, 135, 198, .3)))),
-                              child: TextField(
+                              child: TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Username",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey.shade700)),
+                                  border: InputBorder.none,
+                                  hintText: "Email",
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey.shade700),
+                                  prefixIcon: Icon(Icons.email,
+                                      color: Colors.grey.shade700),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  } else if (!RegExp(r'^\S+@\S+\.\S+$')
+                                      .hasMatch(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
+                            // Password Field
                             Container(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
+                              padding: const EdgeInsets.all(10),
+                              child: TextFormField(
+                                controller: _passwordController,
                                 obscureText: true,
                                 decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey.shade700)),
+                                  border: InputBorder.none,
+                                  hintText: "Password",
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey.shade700),
+                                  prefixIcon: Icon(Icons.lock,
+                                      color: Colors.grey.shade700),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password';
+                                  } else if (value.length < 6) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
                               ),
                             )
                           ],
                         ),
-                      )),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1700),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1700),
                       child: Center(
-                          child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(196, 135, 198, 1)),
-                              )))),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1900),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                                color: Color.fromRGBO(196, 135, 198, 1)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1900),
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Dashboard()),
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Dashboard(),
+                              ),
+                            );
+                          }
                         },
                         color: const Color.fromRGBO(234, 241, 248, 1),
                         shape: RoundedRectangleBorder(
@@ -144,27 +184,33 @@ class _LoginState extends State<Login> {
                                 fontSize: 24),
                           ),
                         ),
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 2000),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 2000),
                       child: Center(
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Register()),
-                                );
-                              },
-                              child: Text(
-                                "Create Account",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(49, 39, 79, .6)),
-                              )))),
-                ],
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Register(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "Create Account",
+                            style: TextStyle(
+                                color: Color.fromRGBO(49, 39, 79, .6)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
