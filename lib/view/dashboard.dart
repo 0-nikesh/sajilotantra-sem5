@@ -104,7 +104,7 @@ class _SocialMediaUIState extends State<SocialMediaUI> {
       ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.white,
