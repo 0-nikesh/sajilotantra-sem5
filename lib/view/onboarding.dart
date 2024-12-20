@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sajilotantra/view/dashboard.dart';
 import 'package:sajilotantra/view/login.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
@@ -37,13 +38,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Login(), // Replace with your Dashboard screen
+          builder: (context) => const Login(),
         ));
   }
 
   void _onNext() {
     if (_currentPage == onboardingData.length - 1) {
-      _onSkip(); // If last page, navigate to the next screen
+      _onSkip();
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -126,11 +127,11 @@ class OnboardingContent extends StatelessWidget {
   final String title, description, image;
 
   const OnboardingContent({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.image,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

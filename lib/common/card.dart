@@ -24,61 +24,93 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Screen dimensions
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Card(
-      margin: const EdgeInsets.all(16.0),
+      margin: EdgeInsets.all(screenWidth * 0.04), // Dynamic margin
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04), // Dynamic padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('assets/images/avatar.png'),
+                  backgroundImage: const AssetImage('assets/images/avatar.png'),
+                  radius: screenWidth * 0.07, // Dynamic avatar size
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: screenWidth * 0.03), // Dynamic spacing
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       username,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: screenWidth * 0.045, // Dynamic font size
                       ),
                     ),
                     Text(
                       time,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 12,
+                        fontSize: screenWidth * 0.035, // Dynamic font size
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Text(content),
-            const SizedBox(height: 5),
+            SizedBox(height: screenHeight * 0.02), // Dynamic spacing
             Text(
-              hashtag,
-              style: const TextStyle(
-                color: Colors.blue,
+              content,
+              style: TextStyle(
+                fontSize: screenWidth * 0.04, // Dynamic font size
               ),
             ),
-            const SizedBox(height: 10),
-            Image.asset(imagePath),
-            const SizedBox(height: 10),
+            SizedBox(height: screenHeight * 0.01), // Dynamic spacing
+            Text(
+              hashtag,
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: screenWidth * 0.04, // Dynamic font size
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.02), // Dynamic spacing
+            Image.asset(
+              imagePath,
+              width: double.infinity,
+              height: screenHeight * 0.3, // 30% of screen height
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: screenHeight * 0.02), // Dynamic spacing
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                IconWithText(icon: Icons.thumb_up, text: likes.toString()),
-                IconWithText(icon: Icons.comment, text: comments.toString()),
-                IconWithText(icon: Icons.share, text: shares.toString()),
+                IconWithText(
+                  icon: Icons.thumb_up,
+                  text: likes.toString(),
+                  iconSize: screenWidth * 0.05, // Dynamic icon size
+                  fontSize: screenWidth * 0.035, // Dynamic font size
+                ),
+                IconWithText(
+                  icon: Icons.comment,
+                  text: comments.toString(),
+                  iconSize: screenWidth * 0.05,
+                  fontSize: screenWidth * 0.035,
+                ),
+                IconWithText(
+                  icon: Icons.share,
+                  text: shares.toString(),
+                  iconSize: screenWidth * 0.05,
+                  fontSize: screenWidth * 0.035,
+                ),
               ],
             ),
           ],
@@ -91,16 +123,34 @@ class PostCard extends StatelessWidget {
 class IconWithText extends StatelessWidget {
   final IconData icon;
   final String text;
+  final double iconSize;
+  final double fontSize;
 
-  const IconWithText({super.key, required this.icon, required this.text});
+  const IconWithText({
+    super.key,
+    required this.icon,
+    required this.text,
+    required this.iconSize,
+    required this.fontSize,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: Colors.grey),
-        const SizedBox(width: 5),
-        Text(text, style: const TextStyle(color: Colors.grey)),
+        Icon(
+          icon,
+          size: iconSize,
+          color: Colors.grey,
+        ),
+        SizedBox(width: iconSize * 0.3), // Proportional spacing
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: fontSize,
+          ),
+        ),
       ],
     );
   }
