@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sajilotantra/app.dart';
+import 'package:sajilotantra/app/app.dart';
 
 import 'package:sajilotantra/main.dart';
 

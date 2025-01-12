@@ -38,6 +38,7 @@ dependencies:
   flutter_animated_splash: ^0.0.10
   animate_do: ^3.3.4
   get_it: ^8.0.3
+  bloc: ^8.1.4
 
 dev_dependencies:
   flutter_test:
