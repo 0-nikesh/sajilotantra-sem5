@@ -28,14 +28,6 @@ class Login extends StatelessWidget {
                 builder: (context) => const Dashboard(),
               ),
             );
-          } else {
-            // Show error message on failure
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Invalid Credentials'),
-                backgroundColor: Colors.red,
-              ),
-            );
           }
         },
         builder: (context, state) {

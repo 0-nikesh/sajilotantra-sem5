@@ -28,16 +28,9 @@ class _RegisterState extends State<Register> {
       body: BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.isSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Registration Successful")),
-            );
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => Login()),
-            );
-          } else if (state.errorMessage.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
             );
           }
         },
