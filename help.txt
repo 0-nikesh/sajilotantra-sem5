@@ -1,0 +1,17 @@
+1. create model in data layer and make it (from entity), (to entity)
+2. create hive table constant  
+3. create entities in domain layer
+4. created hive services and added there in core/network
+5. created datasource and implemented that in local datasource data/datasource
+6. created domain layer repository and implemented that in data layer repository
+7. usecase added in app folder (only once IG)
+8. usecase in domain layer 
+9. create bloc in presentation layer
+10. added dependency injection according to features
+
+
+step 3: Model(replica of database)(inside data layer)
+step 4: create a domain layer repository
+step 5: create a data layer reporitory
+
+dart run build_runner build -d
