@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sajilotantra/app/app.dart';
-import 'package:sajilotantra/services/service_locator.dart';
 
+import 'app/di/di.dart';
+import 'core/network/hive_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initDependency();
+  await HiveService.init();
 
-  runApp(
-    const MyApp(),
-  );
+  // Initialize dependencies (including Hive)
+  await initDependencies();
+
+  runApp(const MyApp());
 }

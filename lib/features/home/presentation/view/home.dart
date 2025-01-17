@@ -1,49 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:sajilotantra/features/home/presentation/view/bottom_view/calendar.dart';
-import 'package:sajilotantra/features/home/presentation/view/bottom_view/document.dart';
-import 'package:sajilotantra/features/home/presentation/view/bottom_view/home.dart';
-import 'package:sajilotantra/features/home/presentation/view/bottom_view/map.dart';
-import 'package:sajilotantra/features/home/presentation/view/bottom_view/setting.dart';
-
-void main() {
-  runApp(const Dashboard());
-}
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sajilotantra/features/home/presentation/view_model/home_cubit.dart';
+import 'package:sajilotantra/features/home/presentation/view_model/home_state.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SocialMediaUI(),
+    return BlocProvider(
+      create: (_) => HomeCubit(),
+      child: const SocialMediaUI(),
     );
   }
 }
 
-class SocialMediaUI extends StatefulWidget {
+class SocialMediaUI extends StatelessWidget {
   const SocialMediaUI({super.key});
-
-  @override
-  _SocialMediaUIState createState() => _SocialMediaUIState();
-}
-
-class _SocialMediaUIState extends State<SocialMediaUI> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const Calendar(),
-    const MapScreen(),
-    const Document(),
-    const Setting(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,21 +51,9 @@ class _SocialMediaUIState extends State<SocialMediaUI> {
           ],
         ),
         actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.black),
-                onPressed: () {},
-              ),
-              const Positioned(
-                right: 8,
-                top: 8,
-                child: CircleAvatar(
-                  radius: 6,
-                  backgroundColor: Colors.red,
-                ),
-              ),
-            ],
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.black),
+            onPressed: () {},
           ),
           const SizedBox(width: 10),
           const CircleAvatar(
@@ -102,7 +63,11 @@ class _SocialMediaUIState extends State<SocialMediaUI> {
           const SizedBox(width: 10),
         ],
       ),
-      body: _screens[_selectedIndex],
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          return state.views[state.selectedIndex];
+        },
+      ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
@@ -117,34 +82,41 @@ class _SocialMediaUIState extends State<SocialMediaUI> {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildNavItem(Icons.home, 0),
-            _buildNavItem(Icons.calendar_month, 1),
-            _buildNavItem(Icons.map, 2),
-            _buildNavItem(Icons.document_scanner, 3),
-            _buildNavItem(Icons.settings, 4),
-          ],
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildNavItem(context, Icons.home, 0, state.selectedIndex),
+                _buildNavItem(
+                    context, Icons.calendar_month, 1, state.selectedIndex),
+                _buildNavItem(context, Icons.map, 2, state.selectedIndex),
+                _buildNavItem(
+                    context, Icons.document_scanner, 3, state.selectedIndex),
+                _buildNavItem(context, Icons.settings, 4, state.selectedIndex),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, int index) {
+  Widget _buildNavItem(
+      BuildContext context, IconData icon, int index, int currentIndex) {
     return GestureDetector(
-      onTap: () => _onItemTapped(index),
+      onTap: () => context.read<HomeCubit>().selectTab(index),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: _selectedIndex == index
+          color: currentIndex == index
               ? const Color.fromRGBO(243, 40, 84, 1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(
           icon,
-          color: _selectedIndex == index ? Colors.white : Colors.grey,
+          color: currentIndex == index ? Colors.white : Colors.grey,
         ),
       ),
     );
