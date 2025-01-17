@@ -1,10 +1,5 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_splash/flutter_animated_splash.dart';
-import 'package:sajilotantra/features/home/presentation/view/dashboard.dart';
-import 'package:sajilotantra/features/auth/presentation/view/login.dart';
 import 'package:sajilotantra/features/auth/presentation/view/onboarding.dart';
-import 'package:sajilotantra/features/auth/presentation/view/register.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,6 +9,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
   void initState() {
     super.initState();
     _navigateToLogin();
@@ -23,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OnboardingScreen()),
+      MaterialPageRoute(builder: (context) => const OnboardingScreen()),
     );
   }
 
@@ -40,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 300,
               height: 200,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Image.asset(
               'assets/images/text-logo.png',
             ),
