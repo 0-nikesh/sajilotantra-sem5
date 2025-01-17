@@ -42,7 +42,7 @@ class UserHiveModel extends Equatable {
     );
   }
 
-  // To Enstity as JSON
+  // To Entity as JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
