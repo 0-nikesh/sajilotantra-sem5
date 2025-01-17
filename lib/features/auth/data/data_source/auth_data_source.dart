@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import '../../domain/entity/auth_entity.dart';
 
 abstract interface class IAuthDataSource {
