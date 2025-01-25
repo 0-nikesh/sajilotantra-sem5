@@ -13,6 +13,8 @@ class AuthLocalDataSource implements IAuthDataSource {
   Future<AuthEntity> getCurrentUser() {
     return Future.value(const AuthEntity(
       id: "1",
+      fname: "",
+      lname: "",
       email: "",
       password: "",
       // isAdmin: false,
@@ -39,6 +41,8 @@ class AuthLocalDataSource implements IAuthDataSource {
       // Convert AuthEntity to UserHiveModel
       final userHiveModel = UserHiveModel(
         id: user.id,
+        fname: user.fname,
+        lname: user.lname,
         email: user.email,
         password: user.password,
         // isAdmin: user.isAdmin,
