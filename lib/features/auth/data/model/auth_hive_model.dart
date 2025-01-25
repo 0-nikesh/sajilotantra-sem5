@@ -12,14 +12,20 @@ class UserHiveModel extends Equatable {
   @HiveField(0)
   final String? id;
   @HiveField(1)
-  final String email;
+  final String fname;
   @HiveField(2)
+  final String lname;
+  @HiveField(3)
+  final String email;
+  @HiveField(4)
   final String password;
   // @HiveField(3)
   // final bool isAdmin;
 
   UserHiveModel({
     String? id,
+    required this.fname,
+    required this.lname,
     required this.email,
     required this.password,
     // this.isAdmin = false,
@@ -28,6 +34,8 @@ class UserHiveModel extends Equatable {
   // Initial Constructor
   const UserHiveModel.initial()
       : id = '',
+        fname = '',
+        lname = '',
         email = '',
         password = '';
   // isAdmin = false;
@@ -36,6 +44,8 @@ class UserHiveModel extends Equatable {
   factory UserHiveModel.fromJson(Map<String, dynamic> json) {
     return UserHiveModel(
       id: json['id'] as String?,
+      fname: json['fname'] as String,
+      lname: json['lnmae'] as String,
       email: json['email'] as String,
       password: json['password'] as String,
       // isAdmin: json['isAdmin'] as bool? ?? false,
@@ -46,6 +56,8 @@ class UserHiveModel extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      "fname": fname,
+      "lname": lname,
       'email': email,
       'password': password,
       // 'isAdmin': isAdmin,
@@ -53,5 +65,5 @@ class UserHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, email, password];
+  List<Object?> get props => [id, fname, lname, email, password];
 }

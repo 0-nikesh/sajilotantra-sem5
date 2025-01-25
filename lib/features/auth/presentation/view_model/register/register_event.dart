@@ -10,17 +10,27 @@ sealed class RegisterEvent extends Equatable {
 
 class RegisterStudentEvent extends RegisterEvent {
   final BuildContext context;
+  final String fname;
+  final String lname;
   final String email;
   final String password;
   final String confirmPassword;
 
   const RegisterStudentEvent({
     required this.context,
+    required this.fname,
+    required this.lname,
     required this.email,
     required this.password,
     required this.confirmPassword,
   });
 
   @override
-  List<Object> get props => [email, password, confirmPassword];
+  List<Object> get props => [
+        fname,
+        lname,
+        email,
+        password,
+        confirmPassword,
+      ];
 }

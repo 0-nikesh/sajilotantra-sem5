@@ -7,6 +7,7 @@ import 'core/network/hive_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveService.init();
+  // await clearUserBox();
 
   // Initialize dependencies (including Hive)
   await initDependencies();
@@ -14,6 +15,10 @@ void main() async {
 
   runApp(const MyApp());
 }
+
+// Future<void> clearUserBox() async {
+//   await Hive.deleteBoxFromDisk('userBox'); // Deletes the box from disk
+// }
 
 Future<void> printAllUsers() async {
   var hiveService = HiveService();

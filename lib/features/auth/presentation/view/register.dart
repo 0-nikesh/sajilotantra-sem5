@@ -16,6 +16,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _lnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -40,7 +42,7 @@ class _RegisterState extends State<Register> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  height: 400,
+                  height: 300,
                   child: Stack(
                     children: <Widget>[
                       Center(
@@ -68,7 +70,7 @@ class _RegisterState extends State<Register> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         FadeInUp(
-                          duration: const Duration(milliseconds: 1500),
+                          duration: const Duration(milliseconds: 0),
                           child: const Center(
                             child: Text(
                               "Register",
@@ -82,7 +84,7 @@ class _RegisterState extends State<Register> {
                         ),
                         const SizedBox(height: 30),
                         FadeInUp(
-                          duration: const Duration(milliseconds: 1700),
+                          duration: const Duration(milliseconds: 0),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -100,6 +102,69 @@ class _RegisterState extends State<Register> {
                             ),
                             child: Column(
                               children: <Widget>[
+                                //first name field
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color:
+                                            Color.fromRGBO(196, 135, 198, .3),
+                                      ),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _fnameController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "First Name",
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey.shade700),
+                                      prefixIcon: Icon(
+                                        Icons.email,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'First Name is Required';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+
+                                //last name
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color:
+                                            Color.fromRGBO(196, 135, 198, .3),
+                                      ),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _lnameController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Last Name",
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey.shade700),
+                                      prefixIcon: Icon(
+                                        Icons.email,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Last Name is Required';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
                                 // Email Field
                                 Container(
                                   padding: const EdgeInsets.all(10),
@@ -202,13 +267,15 @@ class _RegisterState extends State<Register> {
                         ),
                         const SizedBox(height: 20),
                         FadeInUp(
-                          duration: const Duration(milliseconds: 1900),
+                          duration: const Duration(milliseconds: 0),
                           child: MaterialButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 context.read<RegisterBloc>().add(
                                       RegisterStudentEvent(
                                         context: context,
+                                        fname: _fnameController.text,
+                                        lname: _lnameController.text,
                                         email: _emailController.text,
                                         password: _passwordController.text,
                                         confirmPassword:
@@ -235,7 +302,7 @@ class _RegisterState extends State<Register> {
                         ),
                         const SizedBox(height: 10),
                         FadeInUp(
-                          duration: const Duration(milliseconds: 2000),
+                          duration: const Duration(milliseconds: 1000),
                           child: Center(
                             child: TextButton(
                               onPressed: () {
