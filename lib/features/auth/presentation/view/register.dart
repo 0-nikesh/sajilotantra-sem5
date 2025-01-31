@@ -73,26 +73,29 @@ class _RegisterState extends State<Register> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 300,
-                  child: Stack(
-                    children: <Widget>[
-                      Center(
-                        child: FadeInUp(
-                          duration: const Duration(milliseconds: 1000),
-                          child: Container(
-                            height: 200,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/tantra-logo.png'),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                // SizedBox(
+                //   height: 300,
+                //   child: Stack(
+                //     children: <Widget>[
+                //       Center(
+                //         child: FadeInUp(
+                //           duration: const Duration(milliseconds: 1000),
+                //           child: Container(
+                //             height: 200,
+                //             decoration: const BoxDecoration(
+                //               image: DecorationImage(
+                //                 image:
+                //                     AssetImage('assets/images/tantra-logo.png'),
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
+                const SizedBox(
+                  height: 80,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -154,20 +157,26 @@ class _RegisterState extends State<Register> {
                               ),
                             );
                           },
-                          child: SizedBox(
-                            height: 200,
-                            width: 200,
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: _img != null
-                                  ? FileImage(_img!)
-                                  : const AssetImage('assets/images/avatar.jpg')
-                                      as ImageProvider,
-                              // backgroundImage:
-                              //     const AssetImage('assets/images/profile.png')
-                              //         as ImageProvider,
+                          child: Center(
+                            child: SizedBox(
+                              height: 200,
+                              width: 200,
+                              child: CircleAvatar(
+                                radius: 60,
+                                backgroundImage: _img != null
+                                    ? FileImage(_img!)
+                                    : const AssetImage(
+                                            'assets/images/avatar.png')
+                                        as ImageProvider,
+                                // backgroundImage:
+                                //     const AssetImage('assets/images/profile.png')
+                                //         as ImageProvider,
+                              ),
                             ),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         FadeInUp(
                           duration: const Duration(milliseconds: 0),
