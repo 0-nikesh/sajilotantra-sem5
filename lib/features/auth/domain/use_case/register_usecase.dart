@@ -11,42 +11,40 @@ class RegisterUserParams extends Equatable {
   final String lname;
   final String email;
   final String password;
-  // final bool isAdmin;
+  final String profileImage;
 
   const RegisterUserParams({
     required this.fname,
     required this.lname,
     required this.email,
     required this.password,
-    // this.isAdmin = false,
+    required this.profileImage,
   });
-
   const RegisterUserParams.initial()
       : fname = '',
         lname = '',
         email = '',
-        password = '';
-  // isAdmin = false;
+        password = '',
+        profileImage = '';
 
   @override
-  List<Object?> get props => [email, password];
+  // TODO: implement props
+  List<Object?> get props => [fname, lname, email, password, profileImage];
 }
 
-class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
+class RegisterUsecase implements UsecaseWithParams<void, RegisterUserParams> {
   final IAuthRepository repository;
-
-  RegisterUseCase(this.repository);
+  RegisterUsecase(this.repository);
 
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
     final authEntity = AuthEntity(
-      id: null,
-      fname: params.fname,
-      lname: params.lname,
-      email: params.email,
-      password: params.password,
-      // isAdmin: params.isAdmin,
-    );
-    return repository.registerStudent(authEntity);
+        id: null,
+        fname: params.fname,
+        lname: params.lname,
+        email: params.email,
+        password: params.password,
+        profileImage: params.profileImage);
+    return repository.registerUser(authEntity);
   }
 }
