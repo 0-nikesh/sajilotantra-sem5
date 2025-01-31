@@ -172,9 +172,9 @@ class Login extends StatelessWidget {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 context.read<LoginBloc>().add(
-                                      LoginStudentEvent(
+                                      LoginUserEvent(
                                         context: context,
-                                        username: _emailController.text,
+                                        email: _emailController.text,
                                         password: _passwordController.text,
                                       ),
                                     );
