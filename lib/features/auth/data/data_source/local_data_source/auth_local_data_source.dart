@@ -22,7 +22,7 @@ class AuthLocalDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<String> loginStudent(String email, String password) async {
+  Future<String> loginUser(String email, String password) async {
     try {
       final user = await _hiveService.login(email, password);
       if (user != null) {
@@ -36,7 +36,7 @@ class AuthLocalDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<void> registerStudent(AuthEntity user) async {
+  Future<void> registerUser(AuthEntity user) async {
     try {
       // Convert AuthEntity to UserHiveModel
       final userHiveModel = UserHiveModel(
@@ -53,6 +53,12 @@ class AuthLocalDataSource implements IAuthDataSource {
     } catch (e) {
       return Future.error(e);
     }
+  }
+  
+  @override
+  Future<void> verifyEmail(String email, String otp) {
+    // TODO: implement verifyEmail
+    throw UnimplementedError();
   }
 
   // @override
