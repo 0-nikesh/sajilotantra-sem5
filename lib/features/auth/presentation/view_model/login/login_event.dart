@@ -7,19 +7,19 @@ sealed class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoginStudentEvent extends LoginEvent {
+class LoginUserEvent extends LoginEvent {
   final BuildContext context;
-  final String username;
+  final String email;
   final String password;
 
-  const LoginStudentEvent({
+  const LoginUserEvent({
     required this.context,
-    required this.username,
+    required this.email,
     required this.password,
   });
 
   @override
-  List<Object?> get props => [username, password];
+  List<Object?> get props => [email, password];
 }
 
 class NavigateRegisterScreenEvent extends LoginEvent {

@@ -1,28 +1,30 @@
+// import 'package:equatable/equatable.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sajilotantra/app/di/di.dart';
-import 'package:sajilotantra/features/auth/domain/use_case/login_usecase.dart';
-import 'package:sajilotantra/features/auth/presentation/view_model/register/register_bloc.dart';
-import 'package:sajilotantra/features/home/presentation/view/home.dart';
-import 'package:sajilotantra/features/home/presentation/view_model/home_cubit.dart';
+
+import '../../../../../app/di/di.dart';
+import '../../../../home/presentation/view/home.dart';
+import '../../../../home/presentation/view_model/home_cubit.dart';
+import '../../../domain/use_case/login_usecase.dart';
+import '../register/register_bloc.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final LoginUseCase _loginUseCase;
+  final LoginUsecase _loginUseCase;
 
-  LoginBloc({required LoginUseCase loginUseCase, required HomeCubit homeCubit})
+  LoginBloc({required LoginUsecase loginUseCase, required HomeCubit homeCubit})
       : _loginUseCase = loginUseCase,
         super(LoginState.initial()) {
     // Handle Login Event
-    on<LoginStudentEvent>((event, emit) async {
+    on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
       final result = await _loginUseCase(
         LoginParams(
-          email: event.username,
+          email: event.email,
           password: event.password,
         ),
       );
@@ -37,12 +39,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ),
           );
         },
-        (success) {
+        (token) {
           emit(state.copyWith(isLoading: false, isSuccess: true));
           Navigator.pushReplacement(
             event.context,
             MaterialPageRoute(
               builder: (context) => const Dashboard(),
+            ),
+          );
+          ScaffoldMessenger.of(event.context).showSnackBar(
+            const SnackBar(
+              content: Text('Login Successful'),
+              backgroundColor: Color.fromARGB(255, 63, 149, 10),
             ),
           );
         },
