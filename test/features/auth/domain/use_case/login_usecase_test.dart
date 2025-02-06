@@ -26,7 +26,7 @@ void main() {
   const generatedToken = "mock_jwt_token";
 
   group('LoginUsecase Tests', () {
-    test('should return Failure when credentials are incorrect', () async {
+    test('Returns Failure when credentials are incorrect', () async {
       // Arrange
       when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
           const Left(ApiFailure(message: "Invalid user credentials")));
@@ -41,7 +41,7 @@ void main() {
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
 
-    test('should return Failure when email is empty', () async {
+    test('Returns Failure when email is empty', () async {
       // Arrange
       const userLoginParams = LoginParams(email: "", password: "SecurePassword123");
       when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
@@ -56,7 +56,7 @@ void main() {
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
 
-    test('should return Failure when password is empty', () async {
+    test('Returns Failure when password is empty', () async {
       // Arrange
       const userLoginParams = LoginParams(email: "test@example.com", password: "");
       when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
@@ -71,7 +71,7 @@ void main() {
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
 
-    test('should return Failure when there is a server error', () async {
+    test('Returns Failure when there is a server error', () async {
       // Arrange
       when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
           const Left(ApiFailure(message: "Internal Server Error")));
@@ -85,7 +85,7 @@ void main() {
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
 
-    test('should login successfully and return token', () async {
+    test('Returns successfully and return token', () async {
       // Arrange
       when(() => repository.loginUser(any(), any()))
           .thenAnswer((_) async => const Right(generatedToken));
