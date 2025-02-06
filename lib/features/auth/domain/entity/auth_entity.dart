@@ -19,6 +19,14 @@ class AuthEntity extends Equatable {
     // this.isAdmin = false,
   });
 
+  const AuthEntity.empty()
+      : id = '',
+        fname = '',
+        lname = '',
+        profileImage = '',
+        email = '',
+        password = '';
+
   @override
   List<Object?> get props => [id, fname, lname, email, profileImage, password];
 }
