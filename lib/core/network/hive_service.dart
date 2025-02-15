@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sajilotantra/app/constants/hive_table_constant.dart';
 import 'package:sajilotantra/features/auth/data/model/auth_hive_model.dart';
+import 'package:sajilotantra/features/guidance/data/model/guidance_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
@@ -19,6 +20,7 @@ class HiveService {
 
     // Register Adapters
     Hive.registerAdapter(UserHiveModelAdapter());
+    Hive.registerAdapter(GuidanceHiveModelAdapter());
   }
 
   // User Queries
@@ -61,6 +63,43 @@ class HiveService {
   // Clear Specific User Box
   Future<void> clearUserBox() async {
     await Hive.deleteBoxFromDisk(HiveTableConstant.userBox);
+  }
+
+  //----------------------Guidance---------------------------
+
+  // Add a new guidance
+  Future<void> addGuidance(GuidanceHiveModel guidance) async {
+    var box =
+        await Hive.openBox<GuidanceHiveModel>(HiveTableConstant.guidanceBox);
+    await box.put(guidance.id, guidance);
+  }
+
+  // Delete a guidance by ID
+  Future<void> deleteGuidance(String id) async {
+    var box =
+        await Hive.openBox<GuidanceHiveModel>(HiveTableConstant.guidanceBox);
+    await box.delete(id);
+  }
+
+  // Get all guidances
+  Future<List<GuidanceHiveModel>> getAllGuidance() async {
+    var box =
+        await Hive.openBox<GuidanceHiveModel>(HiveTableConstant.guidanceBox);
+    return box.values.toList();
+  }
+
+  // Get a specific guidance by ID
+  Future<GuidanceHiveModel?> getGuidanceById(String id) async {
+    var box =
+        await Hive.openBox<GuidanceHiveModel>(HiveTableConstant.guidanceBox);
+    return box.get(id);
+  }
+
+  // Update a specific guidance
+  Future<void> updateGuidance(String id, GuidanceHiveModel guidance) async {
+    var box =
+        await Hive.openBox<GuidanceHiveModel>(HiveTableConstant.guidanceBox);
+    await box.put(id, guidance);
   }
 
   // Close Hive Database
