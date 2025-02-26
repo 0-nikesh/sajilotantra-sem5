@@ -46,14 +46,18 @@ class GuidanceListScreen extends StatelessWidget {
                       title: Text(guidance.title),
                       subtitle: Text(guidance.category),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GuidanceDetailScreen(
-                              guidanceId: guidance.id!,
+                        print("Guidance ID: ${guidance.id}");
+                        if (guidance.id != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GuidanceDetailScreen(
+                                  guidanceId: guidance.id!),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          print("Guidance ID is null!");
+                        }
                       },
                     ),
                   );
