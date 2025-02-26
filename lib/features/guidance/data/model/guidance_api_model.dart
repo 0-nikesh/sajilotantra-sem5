@@ -15,7 +15,6 @@ class GuidanceApiModel extends Equatable {
   final String category;
   final List<String>? documentsRequired;
   final String? costRequired;
-  final String? governmentProfileId;
   final String? userId;
   final DateTime? createdAt;
 
@@ -27,7 +26,6 @@ class GuidanceApiModel extends Equatable {
     required this.category,
     this.documentsRequired,
     this.costRequired,
-    this.governmentProfileId,
     this.userId,
     this.createdAt,
   });
@@ -49,7 +47,6 @@ class GuidanceApiModel extends Equatable {
       category: category,
       documentsRequired: documentsRequired,
       costRequired: costRequired,
-      governmentProfileId: governmentProfileId,
       userId: userId,
       createdAt: createdAt,
     );
@@ -65,7 +62,6 @@ class GuidanceApiModel extends Equatable {
       category: entity.category,
       documentsRequired: entity.documentsRequired,
       costRequired: entity.costRequired,
-      governmentProfileId: entity.governmentProfileId,
       userId: entity.userId,
       createdAt: entity.createdAt,
     );
@@ -80,7 +76,6 @@ class GuidanceApiModel extends Equatable {
         category,
         documentsRequired,
         costRequired,
-        governmentProfileId,
         userId,
         createdAt,
       ];

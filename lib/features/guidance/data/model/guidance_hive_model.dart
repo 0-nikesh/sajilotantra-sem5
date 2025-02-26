@@ -23,10 +23,8 @@ class GuidanceHiveModel extends Equatable {
   @HiveField(6)
   final String? costRequired;
   @HiveField(7)
-  final String? governmentProfileId;
-  @HiveField(8)
   final String? userId;
-  @HiveField(9)
+  @HiveField(8)
   final DateTime? createdAt;
 
   GuidanceHiveModel({
@@ -37,12 +35,11 @@ class GuidanceHiveModel extends Equatable {
     required this.category,
     this.documentsRequired,
     this.costRequired,
-    this.governmentProfileId,
+    // this.governmentProfileName, // Changed to governmentProfileName
     this.userId,
     this.createdAt,
   }) : id = id ?? const Uuid().v4();
 
-  // Initial Constructor
   const GuidanceHiveModel.initial()
       : id = '',
         title = '',
@@ -51,7 +48,7 @@ class GuidanceHiveModel extends Equatable {
         category = '',
         documentsRequired = const [],
         costRequired = '',
-        governmentProfileId = '',
+        // governmentProfileName = '', // Changed to governmentProfileName
         userId = '',
         createdAt = null;
 
@@ -65,7 +62,7 @@ class GuidanceHiveModel extends Equatable {
       category: category,
       documentsRequired: documentsRequired,
       costRequired: costRequired,
-      governmentProfileId: governmentProfileId,
+      //  governmentProfileName: governmentProfileName, // Changed to governmentProfileName
       userId: userId,
       createdAt: createdAt,
     );
@@ -81,7 +78,8 @@ class GuidanceHiveModel extends Equatable {
       category: entity.category,
       documentsRequired: entity.documentsRequired,
       costRequired: entity.costRequired,
-      governmentProfileId: entity.governmentProfileId,
+      // governmentProfileName:
+      //     entity.governmentProfileName, // Changed to governmentProfileName
       userId: entity.userId,
       createdAt: entity.createdAt,
     );
@@ -99,7 +97,8 @@ class GuidanceHiveModel extends Equatable {
           ?.map((e) => e as String)
           .toList(),
       costRequired: json['costRequired'] as String?,
-      governmentProfileId: json['governmentProfileId'] as String?,
+      //governmentProfileName: json['governmentProfileName']
+         // as String?, // Changed to governmentProfileName
       userId: json['userId'] as String?,
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'] as String)
@@ -117,7 +116,8 @@ class GuidanceHiveModel extends Equatable {
       'category': category,
       'documentsRequired': documentsRequired,
       'costRequired': costRequired,
-      'governmentProfileId': governmentProfileId,
+      // 'governmentProfileName':
+      //     governmentProfileName, // Changed to governmentProfileName
       'userId': userId,
       'createdAt': createdAt?.toIso8601String(),
     };
@@ -132,7 +132,7 @@ class GuidanceHiveModel extends Equatable {
         category,
         documentsRequired,
         costRequired,
-        governmentProfileId,
+        // governmentProfileName, // Changed to governmentProfileName
         userId,
         createdAt,
       ];

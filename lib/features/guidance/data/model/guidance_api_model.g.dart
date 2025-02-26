@@ -17,7 +17,6 @@ GuidanceApiModel _$GuidanceApiModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       costRequired: json['costRequired'] as String?,
-      governmentProfileId: json['governmentProfileId'] as String?,
       userId: json['userId'] as String?,
       createdAt: json['createdAt'] == null
           ? null
@@ -33,7 +32,6 @@ Map<String, dynamic> _$GuidanceApiModelToJson(GuidanceApiModel instance) =>
       'category': instance.category,
       'documentsRequired': instance.documentsRequired,
       'costRequired': instance.costRequired,
-      'governmentProfileId': instance.governmentProfileId,
       'userId': instance.userId,
       'createdAt': instance.createdAt?.toIso8601String(),
     };
