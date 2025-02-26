@@ -7,13 +7,17 @@ part 'auth_api_model.g.dart';
 
 @JsonSerializable()
 class AuthApiModel extends Equatable {
-  @JsonKey(name: '_id')
+  @JsonKey(name: '_id') // Maps MongoDB `_id` to `id`
   final String? id;
+
   final String fname;
   final String lname;
   final String email;
-  final String? password;
+
+  @JsonKey(name: 'image') // Ensures `image` from API maps to `profileImage`
   final String? profileImage;
+
+  final String? password;
 
   const AuthApiModel({
     this.id,
@@ -23,12 +27,15 @@ class AuthApiModel extends Equatable {
     required this.profileImage,
     required this.password,
   });
+
+  /// Factory to create an instance from JSON
   factory AuthApiModel.fromJson(Map<String, dynamic> json) =>
       _$AuthApiModelFromJson(json);
 
+  /// Converts the object to JSON
   Map<String, dynamic> toJson() => _$AuthApiModelToJson(this);
 
-//   To Entity
+  /// Converts to Entity
   AuthEntity toEntity() {
     return AuthEntity(
       id: id,
@@ -40,9 +47,10 @@ class AuthApiModel extends Equatable {
     );
   }
 
-  // From ENtity
+  /// Converts from Entity
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
+      id: entity.id,
       fname: entity.fname,
       lname: entity.lname,
       email: entity.email,
