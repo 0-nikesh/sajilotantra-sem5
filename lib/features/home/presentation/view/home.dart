@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sajilotantra/features/home/presentation/view_model/home_cubit.dart';
 import 'package:sajilotantra/features/home/presentation/view_model/home_state.dart';
+import 'package:sajilotantra/features/userprofile/presentation/view_model/user_bloc.dart';
+import 'package:sajilotantra/features/userprofile/presentation/view_model/user_state.dart';
+
+import '../../../userprofile/presentation/view/profile_modal.dart';
+import '../../../userprofile/presentation/view_model/user_event.dart'; // ✅ Import modal
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HomeCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => HomeCubit()),
+        BlocProvider(
+            create: (_) => GetIt.instance<UserBloc>()..add(FetchUserProfile())),
+      ],
       child: const SocialMediaUI(),
     );
   }
@@ -56,9 +66,31 @@ class SocialMediaUI extends StatelessWidget {
             onPressed: () {},
           ),
           const SizedBox(width: 10),
-          const CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: AssetImage('assets/images/avatar.png'),
+          GestureDetector(
+            onTap: () => showProfileModal(context), // ✅ Opens modal
+            child: BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                if (state is UserLoaded) {
+                  print(
+                      "Profile Image URL: '${state.user.profileImage}'"); // ✅ Debugging
+
+                  return CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: state.user.profileImage != null &&
+                            state.user.profileImage!.isNotEmpty
+                        ? NetworkImage(state.user.profileImage!
+                            .trim()) // ✅ Trim to remove spaces
+                        : const AssetImage('assets/images/avatar.png')
+                            as ImageProvider,
+                  );
+                } else {
+                  return const CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage('assets/images/avatar.png'),
+                  );
+                }
+              },
+            ),
           ),
           const SizedBox(width: 10),
         ],
