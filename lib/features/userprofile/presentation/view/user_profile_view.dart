@@ -24,6 +24,7 @@ class UserProfileScreen extends StatelessWidget {
           elevation: 0,
           centerTitle: true,
           leading: IconButton(
+            key: const Key('back_button'), // ✅ Key for back button
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.pop(context),
           ),
@@ -31,19 +32,21 @@ class UserProfileScreen extends StatelessWidget {
         body: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             if (state is UserLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(
+                    key: Key('loading_indicator')), // ✅ Key for loading
+              );
             } else if (state is UserLoaded) {
               final user = state.user;
               return Center(
-                // ✅ Ensures everything is centered
                 child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // ✅ Vertically center
-                  crossAxisAlignment:
-                      CrossAxisAlignment.center, // ✅ Horizontally center
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // Profile Image with Shadow
                     Container(
+                      key: const Key(
+                          'profile_image_container'), // ✅ Key for container
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [
@@ -55,6 +58,7 @@ class UserProfileScreen extends StatelessWidget {
                         ],
                       ),
                       child: CircleAvatar(
+                        key: const Key('profile_image'), // ✅ Key for image
                         radius: 65,
                         backgroundColor: Colors.white,
                         backgroundImage: user.profileImage != null &&
@@ -70,6 +74,7 @@ class UserProfileScreen extends StatelessWidget {
                     // Full Name
                     Text(
                       "${user.fname} ${user.lname}",
+                      key: const Key('user_fullname'), // ✅ Key for name
                       style: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
@@ -79,6 +84,7 @@ class UserProfileScreen extends StatelessWidget {
                     // Email
                     Text(
                       user.email,
+                      key: const Key('user_email'), // ✅ Key for email
                       style: const TextStyle(fontSize: 16, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
@@ -88,6 +94,8 @@ class UserProfileScreen extends StatelessWidget {
                     SizedBox(
                       width: 180,
                       child: ElevatedButton.icon(
+                        key: const Key(
+                            'edit_profile_button'), // ✅ Key for edit button
                         onPressed: () {
                           // Navigate to Edit Profile Page
                         },
@@ -111,9 +119,17 @@ class UserProfileScreen extends StatelessWidget {
                 ),
               );
             } else if (state is UserError) {
-              return Center(child: Text("Error: ${state.message}"));
+              return Center(
+                child: Text(
+                  "Error: ${state.message}",
+                  key: const Key('error_message'), // ✅ Key for error message
+                ),
+              );
             }
-            return const Center(child: Text("No data available"));
+            return const Center(
+              child: Text("No data available",
+                  key: Key('no_data_message')), // ✅ Key for empty state
+            );
           },
         ),
       ),
