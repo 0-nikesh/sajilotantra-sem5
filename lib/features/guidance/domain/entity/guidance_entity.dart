@@ -8,7 +8,8 @@ class GuidanceEntity extends Equatable {
   final String category;
   final List<String>? documentsRequired;
   final String? costRequired;
-  final String? governmentProfileId;
+  // final String?
+  //     governmentProfileName; // Changed from governmentProfileId to governmentProfileName
   final String? userId;
   final DateTime? createdAt;
 
@@ -20,7 +21,7 @@ class GuidanceEntity extends Equatable {
     required this.category,
     this.documentsRequired,
     this.costRequired,
-    this.governmentProfileId,
+    //this.governmentProfileName, // Changed
     this.userId,
     this.createdAt,
   });
@@ -33,7 +34,7 @@ class GuidanceEntity extends Equatable {
         category = '',
         documentsRequired = const [],
         costRequired = '',
-        governmentProfileId = '',
+        //governmentProfileName = '', // Changed
         userId = '',
         createdAt = null;
 
@@ -46,7 +47,7 @@ class GuidanceEntity extends Equatable {
         category,
         documentsRequired,
         costRequired,
-        governmentProfileId,
+       // governmentProfileName, // Changed
         userId,
         createdAt,
       ];
