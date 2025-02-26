@@ -69,17 +69,25 @@ class GuidanceRemoteDataSource implements IGuidanceDataSource {
   @override
   Future<GuidanceEntity?> getGuidanceById(String id) async {
     try {
-      var response = await _dio
-          .get("${ApiEndpoints.baseUrl}${ApiEndpoints.getGuidanceById}$id");
+      var url = "${ApiEndpoints.baseUrl}${ApiEndpoints.getGuidanceById}$id";
+      print("Fetching Guidance Details from URL: $url");
+
+      var response = await _dio.get(url);
+      print("Response Status: ${response.statusCode}");
+      print("Response Data: ${response.data}");
+
       if (response.statusCode == 200) {
         return GuidanceApiModel.fromJson(response.data).toEntity();
       } else {
-        throw Exception(response.statusMessage);
+        print("Failed to fetch guidance: ${response.statusMessage}");
+        return null;
       }
     } on DioException catch (e) {
-      throw Exception(e.message);
+      print("Dio Error: ${e.response?.data ?? e.message}");
+      throw Exception("Dio Error: ${e.message}");
     } catch (e) {
-      throw Exception(e.toString());
+      print("Unexpected Error: $e");
+      throw Exception("Unexpected Error: $e");
     }
   }
 
