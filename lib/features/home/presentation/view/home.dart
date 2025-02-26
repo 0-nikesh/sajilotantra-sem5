@@ -7,7 +7,7 @@ import 'package:sajilotantra/features/userprofile/presentation/view_model/user_b
 import 'package:sajilotantra/features/userprofile/presentation/view_model/user_state.dart';
 
 import '../../../userprofile/presentation/view/profile_modal.dart';
-import '../../../userprofile/presentation/view_model/user_event.dart'; // ✅ Import modal
+import '../../../userprofile/presentation/view_model/user_event.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -41,10 +41,12 @@ class SocialMediaUI extends StatelessWidget {
               'assets/icons/logo.png',
               height: 30,
               width: 30,
+              key: const Key('app_logo'), // ✅ Add key for testing
             ),
             const SizedBox(width: 20),
-            Flexible(
+            Expanded(
               child: TextField(
+                key: const Key('search_bar'), // ✅ Add key for testing
                 decoration: InputDecoration(
                   hintText: "Search",
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
@@ -62,24 +64,22 @@ class SocialMediaUI extends StatelessWidget {
         ),
         actions: [
           IconButton(
+            key: const Key('notification_icon'), // ✅ Add key for testing
             icon: const Icon(Icons.notifications, color: Colors.black),
             onPressed: () {},
           ),
           const SizedBox(width: 10),
           GestureDetector(
-            onTap: () => showProfileModal(context), // ✅ Opens modal
+            key: const Key('profile_avatar'), // ✅ Add key for testing
+            onTap: () => showProfileModal(context),
             child: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 if (state is UserLoaded) {
-                  print(
-                      "Profile Image URL: '${state.user.profileImage}'"); // ✅ Debugging
-
                   return CircleAvatar(
                     backgroundColor: Colors.white,
                     backgroundImage: state.user.profileImage != null &&
                             state.user.profileImage!.isNotEmpty
-                        ? NetworkImage(state.user.profileImage!
-                            .trim()) // ✅ Trim to remove spaces
+                        ? NetworkImage(state.user.profileImage!.trim())
                         : const AssetImage('assets/images/avatar.png')
                             as ImageProvider,
                   );
@@ -101,6 +101,7 @@ class SocialMediaUI extends StatelessWidget {
         },
       ),
       bottomNavigationBar: Container(
+        key: const Key('bottom_nav_bar'), // ✅ Add key for testing
         margin: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         decoration: BoxDecoration(
@@ -119,13 +120,16 @@ class SocialMediaUI extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildNavItem(context, Icons.home, 0, state.selectedIndex),
                 _buildNavItem(
-                    context, Icons.calendar_month, 1, state.selectedIndex),
-                _buildNavItem(context, Icons.map, 2, state.selectedIndex),
+                    context, Icons.home, 0, state.selectedIndex, 'nav_home'),
+                _buildNavItem(context, Icons.calendar_month, 1,
+                    state.selectedIndex, 'nav_calendar'),
                 _buildNavItem(
-                    context, Icons.document_scanner, 3, state.selectedIndex),
-                _buildNavItem(context, Icons.settings, 4, state.selectedIndex),
+                    context, Icons.map, 2, state.selectedIndex, 'nav_map'),
+                _buildNavItem(context, Icons.document_scanner, 3,
+                    state.selectedIndex, 'nav_documents'),
+                _buildNavItem(context, Icons.settings, 4, state.selectedIndex,
+                    'nav_settings'),
               ],
             );
           },
@@ -134,9 +138,10 @@ class SocialMediaUI extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(
-      BuildContext context, IconData icon, int index, int currentIndex) {
+  Widget _buildNavItem(BuildContext context, IconData icon, int index,
+      int currentIndex, String key) {
     return GestureDetector(
+      key: Key(key), // ✅ Assign keys dynamically for each navigation item
       onTap: () => context.read<HomeCubit>().selectTab(index),
       child: Container(
         padding: const EdgeInsets.all(10),
