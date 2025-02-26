@@ -24,16 +24,15 @@ class GuidanceHiveModelAdapter extends TypeAdapter<GuidanceHiveModel> {
       category: fields[4] as String,
       documentsRequired: (fields[5] as List?)?.cast<String>(),
       costRequired: fields[6] as String?,
-      governmentProfileId: fields[7] as String?,
-      userId: fields[8] as String?,
-      createdAt: fields[9] as DateTime?,
+      userId: fields[7] as String?,
+      createdAt: fields[8] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, GuidanceHiveModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -49,10 +48,8 @@ class GuidanceHiveModelAdapter extends TypeAdapter<GuidanceHiveModel> {
       ..writeByte(6)
       ..write(obj.costRequired)
       ..writeByte(7)
-      ..write(obj.governmentProfileId)
-      ..writeByte(8)
       ..write(obj.userId)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.createdAt);
   }
 
