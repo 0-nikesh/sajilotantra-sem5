@@ -21,6 +21,11 @@ import '../../features/guidance/domain/use_case/get_guidance_by_id_usecase.dart'
 import '../../features/guidance/domain/use_case/update_guidance_usecase.dart';
 import '../../features/guidance/presentation/view_model/guidance_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
+import '../../features/userprofile/data/data_source/user_remote_data_source.dart';
+import '../../features/userprofile/data/repository/user_remote_repository.dart';
+import '../../features/userprofile/domain/repository/user_repository.dart';
+import '../../features/userprofile/domain/use_case/get_user_profile_usecase.dart';
+import '../../features/userprofile/presentation/view_model/user_bloc.dart';
 import '../shared_prefs/token_shared_prefs.dart';
 
 final getIt = GetIt.instance;
@@ -50,6 +55,23 @@ Future<void> _initSharedPreferences() async {
 void _initAuthDependencies() {
   getIt.registerLazySingleton<TokenSharedPrefs>(
     () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
+  getIt.registerLazySingleton<UserRemoteDataSource>(
+    () => UserRemoteDataSourceImpl(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<UserRepository>(
+    () => UserRemoteRepositoryImpl(
+        getIt<UserRemoteDataSource>(), getIt<TokenSharedPrefs>()),
+  );
+
+  getIt.registerLazySingleton<GetUserProfileUseCase>(
+    () => GetUserProfileUseCase(getIt<UserRepository>()),
+  );
+
+  getIt.registerFactory<UserBloc>(
+    () => UserBloc(getIt<GetUserProfileUseCase>()),
   );
 
   getIt.registerLazySingleton<AuthRemoteDataSource>(
