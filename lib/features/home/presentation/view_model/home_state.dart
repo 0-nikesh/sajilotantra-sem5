@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:sajilotantra/features/home/presentation/view/bottom_view/calendar.dart';
-import 'package:sajilotantra/features/home/presentation/view/bottom_view/document.dart';
 import 'package:sajilotantra/features/home/presentation/view/bottom_view/map.dart';
 import 'package:sajilotantra/features/home/presentation/view/bottom_view/setting.dart';
 
+import '../../../guidance/presentation/view/guidance_list_view.dart';
 import '../view/bottom_view/first.dart';
 
 class HomeState extends Equatable {
@@ -24,7 +24,7 @@ class HomeState extends Equatable {
         HomeScreen(),
         Calendar(),
         MapScreen(),
-        Document(),
+        GuidanceListScreen(),
         Setting(),
       ],
     );
