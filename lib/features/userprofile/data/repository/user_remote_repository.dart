@@ -1,9 +1,10 @@
+// features/user/data/repository/user_remote_repository.dart
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../app/shared_prefs/token_shared_prefs.dart';
 import '../../../../core/error/failure.dart';
-import '../../../auth/domain/entity/auth_entity.dart';
+import '../../domain/entity/user_entity.dart';
 import '../../domain/repository/user_repository.dart';
 import '../data_source/user_remote_data_source.dart';
 
@@ -14,7 +15,7 @@ class UserRemoteRepositoryImpl implements UserRepository {
   UserRemoteRepositoryImpl(this.userRemoteDataSource, this.tokenSharedPrefs);
 
   @override
-  Future<Either<Failure, AuthEntity>> getUserProfile() async {
+  Future<Either<Failure, UserEntity>> getUserProfile() async {
     try {
       final tokenResult = await tokenSharedPrefs.getToken();
       return tokenResult.fold(
@@ -25,9 +26,9 @@ class UserRemoteRepositoryImpl implements UserRepository {
           }
 
           final decodedToken = JWT.decode(token);
-          final userId = decodedToken.payload['id'];
+          final userId = decodedToken.payload['id'] as String?;
 
-          if (userId == null || userId is! String) {
+          if (userId == null || userId.isEmpty) {
             return const Left(
                 ApiFailure(message: "User ID not found in token"));
           }

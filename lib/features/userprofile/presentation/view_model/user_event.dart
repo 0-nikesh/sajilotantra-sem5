@@ -1,3 +1,4 @@
+// features/user/presentation/view_model/user_event.dart
 import 'package:equatable/equatable.dart';
 
 abstract class UserEvent extends Equatable {
@@ -5,4 +6,4 @@ abstract class UserEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchUserProfile extends UserEvent {} // ✅ Fetch user without params
+class FetchUserProfile extends UserEvent {}

@@ -47,6 +47,7 @@ Future<void> initDependencies() async {
   _initHomeDependencies();
   _initGuidanceDependencies();
   _initPostDependencies();
+  _initUserDependencies();
 }
 
 void _initHiveService() {
@@ -55,6 +56,11 @@ void _initHiveService() {
 
 void _initApiService() {
   getIt.registerLazySingleton<Dio>(() => ApiService(Dio()).dio);
+
+  // Register UserRemoteDataSource here, shared across auth and user features
+  getIt.registerLazySingleton<UserRemoteDataSource>(
+    () => UserRemoteDataSourceImpl(getIt<Dio>()),
+  );
 }
 
 Future<void> _initSharedPreferences() async {
@@ -102,18 +108,13 @@ void _initPostDependencies() {
   );
 }
 
-void _initAuthDependencies() {
-  getIt.registerLazySingleton<TokenSharedPrefs>(
-    () => TokenSharedPrefs(getIt<SharedPreferences>()),
-  );
-
-  getIt.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSourceImpl(getIt<Dio>()),
-  );
-
+void _initUserDependencies() {
+  // Remove the duplicate UserRemoteDataSource registration here
   getIt.registerLazySingleton<UserRepository>(
     () => UserRemoteRepositoryImpl(
-        getIt<UserRemoteDataSource>(), getIt<TokenSharedPrefs>()),
+      getIt<UserRemoteDataSource>(),
+      getIt<TokenSharedPrefs>(),
+    ),
   );
 
   getIt.registerLazySingleton<GetUserProfileUseCase>(
@@ -123,7 +124,14 @@ void _initAuthDependencies() {
   getIt.registerFactory<UserBloc>(
     () => UserBloc(getIt<GetUserProfileUseCase>()),
   );
+}
 
+void _initAuthDependencies() {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
+  // Remove the duplicate UserRemoteDataSource registration here
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(getIt<Dio>()),
   );
