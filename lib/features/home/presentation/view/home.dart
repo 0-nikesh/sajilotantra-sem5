@@ -178,11 +178,11 @@ class SocialMediaUI extends StatelessWidget {
                 if (state is UserLoaded) {
                   return CircleAvatar(
                     backgroundColor: Theme.of(context).cardColor,
-                    backgroundImage: state.user.profileImage != null &&
-                            state.user.profileImage!.isNotEmpty
-                        ? NetworkImage(state.user.profileImage!.trim())
-                        : const AssetImage('assets/images/avatar.png')
-                            as ImageProvider,
+                    backgroundImage:
+                        state.user.image != null && state.user.image!.isNotEmpty
+                            ? NetworkImage(state.user.image!.trim())
+                            : const AssetImage('assets/images/avatar.png')
+                                as ImageProvider,
                   );
                 } else {
                   return CircleAvatar(
