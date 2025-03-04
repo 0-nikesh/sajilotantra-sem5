@@ -7,6 +7,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../app/di/di.dart';
 import '../../../../post/domain/entity/post_entity.dart';
+import '../../../../post/presentation/view/create_post_view.dart';
 import '../../../../post/presentation/view_model/post_bloc.dart';
 import '../../../../post/presentation/view_model/post_state.dart';
 
@@ -16,7 +17,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: BlocProvider(
         create: (context) => getIt<PostBloc>()..add(FetchPostsEvent()),
         child: BlocBuilder<PostBloc, PostState>(
@@ -52,9 +52,9 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to create post screen
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Create new post feature coming soon')),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CreatePostView()),
           );
         },
         child: const Icon(Icons.add),
@@ -85,12 +85,18 @@ class HomeScreen extends StatelessWidget {
                 contentPadding:
                     const EdgeInsets.only(left: 16, right: 16, top: 8),
                 leading: CircleAvatar(
-                  backgroundColor:
-                      Colors.primaries[index % Colors.primaries.length],
-                  child: Text(post.userId.substring(0, 1).toUpperCase()),
+                  backgroundImage:
+                      post.userImage != null && post.userImage!.isNotEmpty
+                          ? CachedNetworkImageProvider(post.userImage!)
+                          : null, // Use user image if available
+                  backgroundColor: Colors.grey.shade200, // Fallback color
+                  child: post.userImage == null || post.userImage!.isEmpty
+                      ? const Icon(Icons.person, size: 20, color: Colors.grey)
+                      : null, // Fallback icon if no image
                 ),
                 title: Text(
-                  'User ${post.userId}',
+                  post.username ??
+                      'Unknown User', // Use username (fname + lname) or fallback
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
