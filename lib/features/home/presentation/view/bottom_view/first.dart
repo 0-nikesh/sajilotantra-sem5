@@ -95,8 +95,7 @@ class HomeScreen extends StatelessWidget {
                       : null, // Fallback icon if no image
                 ),
                 title: Text(
-                  post.username ??
-                      'Unknown User', // Use username (fname + lname) or fallback
+                  post.username ?? 'Unknown User', // Use username or fallback
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
@@ -287,43 +286,61 @@ class HomeScreen extends StatelessWidget {
               // Comment input
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.grey.shade200,
-                      child: const Icon(Icons.person,
-                          size: 20, color: Colors.grey),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Add a comment...',
-                          hintStyle: TextStyle(color: Colors.grey.shade400),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 8),
+                child: Builder(
+                  builder: (commentContext) {
+                    return Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 16,
+                          backgroundColor: Colors.grey.shade200,
+                          child: const Icon(Icons.person,
+                              size: 20, color: Colors.grey),
                         ),
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Comment feature coming soon')),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(50, 30),
-                      ),
-                      child: const Text('Post',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                  ],
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Add a comment...',
+                              hintStyle: TextStyle(color: Colors.grey.shade400),
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            onSubmitted: (value) {
+                              if (value.isNotEmpty) {
+                                commentContext.read<PostBloc>().add(
+                                    AddCommentEvent(
+                                        postId: post.id, commentText: value));
+                              }
+                            },
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            final commentText = (commentContext
+                                    .findAncestorWidgetOfExactType<TextField>()!
+                                    .controller!
+                                    .text)
+                                .trim();
+                            if (commentText.isNotEmpty) {
+                              commentContext.read<PostBloc>().add(
+                                  AddCommentEvent(
+                                      postId: post.id,
+                                      commentText: commentText));
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: const Size(50, 30),
+                          ),
+                          child: const Text('Post',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],
@@ -492,129 +509,154 @@ class HomeScreen extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.7,
-          maxChildSize: 0.9,
-          minChildSize: 0.5,
-          expand: false,
-          builder: (context, scrollController) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(2),
+      builder: (BuildContext dialogContext) {
+        return Builder(
+          builder: (sheetContext) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.7,
+              maxChildSize: 0.9,
+              minChildSize: 0.5,
+              expand: false,
+              builder: (context, scrollController) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Container(
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Comments',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(),
-                Expanded(
-                  child: post.comments.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No comments yet',
-                            style: TextStyle(color: Colors.grey.shade600),
-                          ),
-                        )
-                      : ListView.builder(
-                          controller: scrollController,
-                          itemCount: post.comments.length,
-                          itemBuilder: (context, index) {
-                            final comment = post.comments[index];
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors
-                                    .primaries[index % Colors.primaries.length],
-                                child: Text(
-                                    comment.user.substring(0, 1).toUpperCase()),
-                              ),
-                              title: Text(
-                                comment.user,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(comment.text),
-                              trailing: Text(
-                                '${index + 1}m',
-                                style: TextStyle(
-                                    color: Colors.grey.shade500, fontSize: 12),
-                              ),
-                            );
-                          },
-                        ),
-                ),
-                const Divider(height: 1),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Colors.grey.shade200,
-                        child: const Icon(Icons.person,
-                            size: 24, color: Colors.grey),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Add a comment...',
-                            hintStyle: TextStyle(color: Colors.grey.shade400),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24),
-                              borderSide: BorderSide.none,
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey.shade100,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Comments',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              Navigator.pop(dialogContext);
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        icon: const Icon(Icons.send, color: Colors.blue),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Comment feature coming soon')),
-                          );
-                          Navigator.pop(context);
-                        },
+                    ),
+                    const Divider(),
+                    Expanded(
+                      child: post.comments.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No comments yet',
+                                style: TextStyle(color: Colors.grey.shade600),
+                              ),
+                            )
+                          : ListView.builder(
+                              controller: scrollController,
+                              itemCount: post.comments.length,
+                              itemBuilder: (context, index) {
+                                final comment = post.comments[index];
+                                return ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.primaries[
+                                        index % Colors.primaries.length],
+                                    child: Text(comment.user
+                                        .substring(0, 1)
+                                        .toUpperCase()),
+                                  ),
+                                  title: Text(
+                                    comment.user,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(comment.text),
+                                  trailing: Text(
+                                    '${index + 1}m',
+                                    style: TextStyle(
+                                        color: Colors.grey.shade500,
+                                        fontSize: 12),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                    const Divider(height: 1),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.grey.shade200,
+                            child: const Icon(Icons.person,
+                                size: 24, color: Colors.grey),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Add a comment...',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey.shade400),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                  borderSide: BorderSide.none,
+                                ),
+                                filled: true,
+                                fillColor: Colors.grey.shade100,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 10,
+                                ),
+                              ),
+                              onSubmitted: (value) {
+                                if (value.isNotEmpty) {
+                                  sheetContext.read<PostBloc>().add(
+                                      AddCommentEvent(
+                                          postId: post.id, commentText: value));
+                                  Navigator.pop(
+                                      dialogContext); // Close the sheet
+                                }
+                              },
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.send, color: Colors.blue),
+                            onPressed: () {
+                              final commentText = (sheetContext
+                                      .findAncestorWidgetOfExactType<
+                                          TextField>()!
+                                      .controller!
+                                      .text)
+                                  .trim();
+                              if (commentText.isNotEmpty) {
+                                sheetContext.read<PostBloc>().add(
+                                    AddCommentEvent(
+                                        postId: post.id,
+                                        commentText: commentText));
+                                Navigator.pop(dialogContext); // Close the sheet
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                    ),
+                  ],
+                );
+              },
             );
           },
         );

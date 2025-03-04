@@ -47,7 +47,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       (failure) => emit(PostError(message: failure.message)),
       (_) {
         emit(PostLiked());
-        add(FetchPostsEvent()); // Refresh posts
+        add(FetchPostsEvent()); // Refresh posts after liking
       },
     );
   }
@@ -60,7 +60,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       (failure) => emit(PostError(message: failure.message)),
       (_) {
         emit(CommentAdded());
-        add(FetchPostsEvent()); // Refresh posts
+        add(FetchPostsEvent()); // Refresh posts after adding a comment
       },
     );
   }
@@ -84,8 +84,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   // Uncomment and use if needed
-  // Future<void> _onGetPostById(
-  //     GetPostByIdEvent event, Emitter<PostState> emit) async {
+  // Future<void> _onGetPostById(GetPostByIdEvent event, Emitter<PostState> emit) async {
   //   emit(PostLoading());
   //   final result = await getPostByIdUseCase(event.postId);
   //   result.fold(

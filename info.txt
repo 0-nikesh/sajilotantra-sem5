@@ -1,0 +1,10 @@
+ST6002CEM Mobile Application Development	
+Nikesh Bhandari
+Coventry ID: 13703679
+
+
+Sajilotantra
+A platform where users can share out there thoughts,
+frustations, suggestions on governmental procedures and 
+can find out details guidance on creating documents,
+map to find routes to nearest government profiles. 
