@@ -4,8 +4,8 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
   // static const String baseUrl = "http://10.0.2.2:3000/api/";
-  // static const String baseUrl = "http://192.168.1.76:3000/api/";
-  static const String baseUrl = "http://192.168.101.7:3000/api/";
+  static const String baseUrl = "http://192.168.1.76:3000/api/";
+  // static const String baseUrl = "http://192.168.101.7:3000/api/";
 
   // For iPhone
   //static const String baseUrl = "http://localhost:3000/api/";
@@ -26,4 +26,9 @@ class ApiEndpoints {
   static const String getGuidanceById = "guidances/";
   static const String updateGuidance = "guidances/";
   static const String updateDocumentTracking = "guidances/";
+
+  //=========================== Post Routes =========================
+  static const String getAllPost = "posts/all";
+  static const String getPostById = "posts/";
+  static const String createPost = "posts/";
 }

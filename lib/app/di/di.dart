@@ -21,6 +21,15 @@ import '../../features/guidance/domain/use_case/get_guidance_by_id_usecase.dart'
 import '../../features/guidance/domain/use_case/update_guidance_usecase.dart';
 import '../../features/guidance/presentation/view_model/guidance_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
+import '../../features/post/data/data_source/post_remote_data_source.dart';
+import '../../features/post/data/repository/post_repository_impl.dart';
+import '../../features/post/domain/repository/post_repository.dart';
+import '../../features/post/domain/use_case/add_comment_usecase.dart';
+import '../../features/post/domain/use_case/crearte_posts_usecase.dart';
+import '../../features/post/domain/use_case/fetch_posts_usecase.dart';
+import '../../features/post/domain/use_case/get_post_by_id.dart';
+import '../../features/post/domain/use_case/like_posts_usecase.dart';
+import '../../features/post/presentation/view_model/post_bloc.dart';
 import '../../features/userprofile/data/data_source/user_remote_data_source.dart';
 import '../../features/userprofile/data/repository/user_remote_repository.dart';
 import '../../features/userprofile/domain/repository/user_repository.dart';
@@ -37,6 +46,7 @@ Future<void> initDependencies() async {
   _initAuthDependencies();
   _initHomeDependencies();
   _initGuidanceDependencies();
+  _initPostDependencies();
 }
 
 void _initHiveService() {
@@ -50,6 +60,46 @@ void _initApiService() {
 Future<void> _initSharedPreferences() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
+void _initPostDependencies() {
+  getIt.registerLazySingleton<PostRemoteDataSource>(
+    () => PostRemoteDataSource(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<IPostRepository>(
+    () => PostRepositoryImpl(postDataSource: getIt<PostRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<FetchPostsUseCase>(
+    () => FetchPostsUseCase(getIt<IPostRepository>()),
+  );
+
+  getIt.registerLazySingleton<LikePostUseCase>(
+    () => LikePostUseCase(getIt<IPostRepository>()),
+  );
+
+  getIt.registerLazySingleton<AddCommentUseCase>(
+    () => AddCommentUseCase(getIt<IPostRepository>()),
+  );
+
+  getIt.registerLazySingleton<CreatePostUseCase>(
+    () => CreatePostUseCase(getIt<IPostRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetPostByIdUseCase>(
+    () => GetPostByIdUseCase(getIt<IPostRepository>()),
+  );
+
+  getIt.registerFactory<PostBloc>(
+    () => PostBloc(
+      fetchPostsUseCase: getIt<FetchPostsUseCase>(),
+      likePostUseCase: getIt<LikePostUseCase>(),
+      addCommentUseCase: getIt<AddCommentUseCase>(),
+      createPostUseCase: getIt<CreatePostUseCase>(),
+      getPostByIdUseCase: getIt<GetPostByIdUseCase>(),
+    ),
+  );
 }
 
 void _initAuthDependencies() {
