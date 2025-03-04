@@ -14,10 +14,10 @@ class GuidanceListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet =
-        MediaQuery.of(context).size.width > 600; // 📱➡️📟 Check for tablet mode
+    final isTablet = MediaQuery.of(context).size.width > 600;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BlocProvider(
         create: (context) => GuidanceBloc(
           getAllGuidancesUseCase: getIt<GetAllGuidancesUseCase>(),
@@ -25,24 +25,26 @@ class GuidanceListScreen extends StatelessWidget {
         )..add(LoadAllGuidancesEvent()),
         child: BlocBuilder<GuidanceBloc, GuidanceState>(
           builder: (context, state) {
-            if (state is GuidanceLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is GuidanceLoadedState) {
+            if (state is GuidanceLoadedState) {
               if (state.guidances.isEmpty) {
-                return const Center(child: Text("No Data Available"));
+                return Center(
+                  child: Text(
+                    "No Guidance Available",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                );
               }
 
               return Padding(
-                padding: const EdgeInsets.all(
-                    12.0), // More padding for larger screens
+                padding: const EdgeInsets.all(16.0),
                 child: isTablet
                     ? GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // 📟 Two columns for tablets
-                          childAspectRatio: 3, // Adjust item size
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
+                          crossAxisCount: 2,
+                          childAspectRatio: 3,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
                         ),
                         itemCount: state.guidances.length,
                         itemBuilder: (context, index) {
@@ -59,21 +61,33 @@ class GuidanceListScreen extends StatelessWidget {
                       ),
               );
             } else if (state is GuidanceErrorState) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Text(
+                  state.message,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.redAccent,
+                      ),
+                ),
+              );
             }
-            return const Center(child: Text("No Data Available"));
+            return Center(
+              child: Text(
+                "Waiting for Guidance...",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
           },
         ),
       ),
     );
   }
 
-  /// 📌 A reusable method to create a guidance card
   Widget _buildGuidanceCard(
       BuildContext context, dynamic guidance, bool isTablet) {
     return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Theme.of(context).cardColor,
       child: InkWell(
         onTap: () {
           if (guidance.id != null) {
@@ -87,38 +101,44 @@ class GuidanceListScreen extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 child: Image.network(
                   guidance.thumbnail ?? '',
-                  width: isTablet ? 100 : 60, // Bigger images for tablets
-                  height: isTablet ? 100 : 60,
+                  width: isTablet ? 100 : 70,
+                  height: isTablet ? 100 : 70,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.image_not_supported, size: 40);
+                    return Container(
+                      width: isTablet ? 100 : 70,
+                      height: isTablet ? 100 : 70,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported, size: 40),
+                    );
                   },
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       guidance.title,
-                      style: TextStyle(
-                          fontSize: isTablet ? 20 : 16,
-                          fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     Text(
                       guidance.category,
-                      style: TextStyle(
-                          fontSize: isTablet ? 16 : 14, color: Colors.grey),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey[600],
+                          ),
                     ),
                   ],
                 ),

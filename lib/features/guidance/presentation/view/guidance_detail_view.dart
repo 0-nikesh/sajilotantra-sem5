@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart'; // Import flutter_html
+import 'package:flutter_html/flutter_html.dart';
 
 import '../../../../app/di/di.dart';
 import '../../domain/use_case/get_all_guidance_usecase.dart';
@@ -17,7 +17,14 @@ class GuidanceDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Guidance Details")),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        title: Text(
+          "Guidance Details",
+          style: Theme.of(context).appBarTheme.titleTextStyle,
+        ),
+      ),
       body: BlocProvider(
         create: (context) => GuidanceBloc(
           getAllGuidancesUseCase: getIt<GetAllGuidancesUseCase>(),
@@ -25,22 +32,28 @@ class GuidanceDetailScreen extends StatelessWidget {
         )..add(LoadGuidanceDetailsEvent(guidanceId: guidanceId)),
         child: BlocBuilder<GuidanceBloc, GuidanceState>(
           builder: (context, state) {
-            if (state is GuidanceLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is GuidanceDetailsLoadedState) {
+            if (state is GuidanceDetailsLoadedState) {
               final guidance = state.guidance;
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Full-width image with fixed height
                     Image.network(
                       guidance.thumbnail,
                       width: double.infinity,
                       height: 250,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 250,
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Icon(Icons.image_not_supported, size: 60),
+                          ),
+                        );
+                      },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
@@ -48,24 +61,36 @@ class GuidanceDetailScreen extends StatelessWidget {
                         children: [
                           Text(
                             guidance.title,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           const SizedBox(height: 8),
-                          Text("Category: ${guidance.category}"),
-                          const SizedBox(height: 16),
+                          Text(
+                            "Category: ${guidance.category}",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                          ),
+                          const SizedBox(height: 20),
                           _buildAccordion(
+                            context,
                             title: "Documents Required",
                             content: guidance.documentsRequired?.join("\n") ??
                                 "No documents specified.",
                           ),
                           _buildAccordion(
+                            context,
                             title: "Steps to Follow",
-                            content:
-                                guidance.description, // Render HTML content
+                            content: guidance.description,
                             isHtml: true,
                           ),
                           _buildAccordion(
+                            context,
                             title: "Cost Required",
                             content: guidance.costRequired ??
                                 "No cost information available.",
@@ -77,27 +102,52 @@ class GuidanceDetailScreen extends StatelessWidget {
                 ),
               );
             } else if (state is GuidanceErrorState) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Text(
+                  state.message,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.redAccent,
+                      ),
+                ),
+              );
             }
-            return const Center(child: Text("No Details Available"));
+            return Center(
+              child: Text(
+                "Waiting for Details...",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
           },
         ),
       ),
     );
   }
 
-  Widget _buildAccordion(
+  Widget _buildAccordion(BuildContext context,
       {required String title, required String content, bool isHtml = false}) {
-    return ExpansionTile(
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: isHtml
-              ? Html(data: content) // Render HTML content
-              : Text(content, style: const TextStyle(fontSize: 16)),
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Theme.of(context).cardColor,
+      child: ExpansionTile(
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
-      ],
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: isHtml
+                ? Html(data: content)
+                : Text(
+                    content,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
