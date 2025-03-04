@@ -23,7 +23,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  bool _isDarkMode = false;
   Timer? _brightnessTimer;
   StreamSubscription? _accelerometerSubscription;
   final double _shakeThreshold = 15.0;
@@ -34,35 +33,29 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    _startBrightnessListener(); // ✅ Start brightness detection
-    _startShakeDetection(); // ✅ Start shake detection
+    _startBrightnessListener(); // Start brightness detection
+    _startShakeDetection(); // Start shake detection
   }
 
-  /// ✅ Continuously listen for brightness changes every 3 seconds
+  /// Continuously listen for brightness changes every 3 seconds (for logging only)
   void _startBrightnessListener() {
     _brightnessTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       _checkBrightness();
     });
   }
 
-  /// ✅ Check screen brightness in real-time
+  /// Check screen brightness in real-time (for debugging, no UI impact)
   Future<void> _checkBrightness() async {
     try {
       double brightness = await ScreenBrightness().current;
       print("📊 Real-time Brightness: $brightness");
-
-      if (mounted) {
-        setState(() {
-          _isDarkMode =
-              brightness < 0.3; // Toggle dark mode if brightness < 30%
-        });
-      }
+      // Note: No setState here; theme is handled by ThemeMode.system in app.dart
     } catch (e) {
       print("❌ Error getting brightness: $e");
     }
   }
 
-  /// ✅ Detect Shake to Logout
+  /// Detect Shake to Logout
   void _startShakeDetection() {
     _accelerometerSubscription =
         accelerometerEvents.listen((AccelerometerEvent event) {
@@ -89,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  /// ✅ Logout user
+  /// Logout user
   Future<void> _logoutUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
@@ -117,29 +110,26 @@ class _DashboardState extends State<Dashboard> {
       providers: [
         BlocProvider(create: (_) => HomeCubit()),
         BlocProvider(
-            create: (_) => GetIt.instance<UserBloc>()..add(FetchUserProfile())),
+          create: (_) => GetIt.instance<UserBloc>()..add(FetchUserProfile()),
+        ),
       ],
-      child: SocialMediaUI(isDarkMode: _isDarkMode), // Pass dark mode state
+      child: const SocialMediaUI(), // No need to pass isDarkMode
     );
   }
 }
 
 class SocialMediaUI extends StatelessWidget {
-  final bool isDarkMode; // 🔥 Accept dark mode status
-
-  const SocialMediaUI({super.key, required this.isDarkMode});
+  const SocialMediaUI({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDarkMode
-          ? Colors.black // 🌑 Dark mode
-          : const Color.fromRGBO(234, 241, 248, 1), // ☀️ Light mode
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor:
-            isDarkMode ? Colors.black : Colors.white, // Dark mode AppBar
-        elevation: 0,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
+        elevation: Theme.of(context).appBarTheme.elevation,
         title: Row(
           children: [
             Image.asset(
@@ -152,19 +142,24 @@ class SocialMediaUI extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: "Search",
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  hintStyle: TextStyle(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color
+                        ?.withOpacity(0.6),
+                  ),
+                  prefixIcon: Icon(Icons.search,
+                      color: Theme.of(context).iconTheme.color),
                   filled: true,
-                  fillColor: isDarkMode
-                      ? Colors.grey[900]
-                      : const Color.fromRGBO(234, 241, 248, 1),
+                  fillColor: Theme.of(context).cardColor.withOpacity(0.8),
                   contentPadding: const EdgeInsets.all(5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
                   ),
                 ),
-                style:
-                    TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ],
@@ -172,7 +167,7 @@ class SocialMediaUI extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications,
-                color: isDarkMode ? Colors.white : Colors.black),
+                color: Theme.of(context).iconTheme.color),
             onPressed: () {},
           ),
           const SizedBox(width: 10),
@@ -182,8 +177,7 @@ class SocialMediaUI extends StatelessWidget {
               builder: (context, state) {
                 if (state is UserLoaded) {
                   return CircleAvatar(
-                    backgroundColor:
-                        isDarkMode ? Colors.grey[800] : Colors.white,
+                    backgroundColor: Theme.of(context).cardColor,
                     backgroundImage: state.user.profileImage != null &&
                             state.user.profileImage!.isNotEmpty
                         ? NetworkImage(state.user.profileImage!.trim())
@@ -192,8 +186,7 @@ class SocialMediaUI extends StatelessWidget {
                   );
                 } else {
                   return CircleAvatar(
-                    backgroundColor:
-                        isDarkMode ? Colors.grey[800] : Colors.white,
+                    backgroundColor: Theme.of(context).cardColor,
                     backgroundImage:
                         const AssetImage('assets/images/avatar.png'),
                   );
@@ -218,13 +211,11 @@ class SocialMediaUI extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.black : Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: isDarkMode
-                ? Colors.white.withOpacity(0.1)
-                : Colors.black.withOpacity(0.1),
+            color: Theme.of(context).shadowColor.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -257,9 +248,7 @@ class SocialMediaUI extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: currentIndex == index
-              ? (isDarkMode
-                  ? Colors.redAccent
-                  : const Color.fromRGBO(243, 40, 84, 1))
+              ? Theme.of(context).primaryColor
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
@@ -267,7 +256,7 @@ class SocialMediaUI extends StatelessWidget {
           icon,
           color: currentIndex == index
               ? Colors.white
-              : (isDarkMode ? Colors.grey[400] : Colors.grey),
+              : Theme.of(context).iconTheme.color?.withOpacity(0.7),
         ),
       ),
     );
