@@ -60,6 +60,16 @@ dependencies:
   light_sensor: ^3.0.1
   light: ^4.0.0
   screen_brightness: ^2.1.1
+  like_button: ^2.0.5
+  cached_network_image: ^3.4.1
+  timeago: ^3.7.0
+  google_fonts: ^6.2.1
+  flutter_map: ^8.1.0
+  geolocator: ^13.0.2
+  latlong2: ^0.9.1
+  geocoding: ^3.0.0
+  table_calendar: ^3.1.3
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +84,7 @@ dev_dependencies:
   hive_generator: ^2.0.1
   build_runner: ^2.4.0
   test_cov_console: ^0.2.2
+  mockito: ^5.4.5
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
