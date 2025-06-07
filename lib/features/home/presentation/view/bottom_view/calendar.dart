@@ -12,7 +12,11 @@ class _CalendarState extends State<Calendar> {
   DateTime _focusedDay = DateTime.now(); // Current date: March 4, 2025
   DateTime? _selectedDay;
 
-
+  // Dummy events map
+  final Map<DateTime, List<String>> _events = {
+    DateTime(2025, 3, 7): ['Road Construction'],
+    DateTime(2025, 3, 13): ['Holi'],
+  };
 
   @override
   void initState() {
